@@ -5,6 +5,7 @@
 typedef struct Reg {
 	char nomeProduto[50];
 	float preco;
+	int qtd;
 	void *prox;
 }ProdutoL;
 
@@ -19,10 +20,12 @@ void incluir(ProdutoL *p) {
 		printf("preco: \n");
 		scanf(" %f", &aux->preco);
 		fflush(stdin);
+		printf("quantidade: \n");
+		scanf(" %d", &aux->qtd);
+		fflush(stdin);
 		if(p->prox == NULL) {
 			aux->prox = p->prox;
 			p->prox = aux;
-
 		}
 		else {
 			auxAnt->prox = aux;
