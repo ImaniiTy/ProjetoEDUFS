@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct Reg {
 	char nomeProduto[50];
@@ -9,10 +10,26 @@ typedef struct Reg {
 	void *prox;
 }ProdutoL;
 
+float imprimir(ProdutoL *p) {
+	ProdutoL *aux;
+	aux = p->prox;
+	float soma = 0;
+	do {
+		printf("Nome: %s     ", aux->nomeProduto);
+		printf("%0.2fRS    ", aux->preco);
+		printf("Quantidade: %d\n", aux->qtd);
+		soma += aux->preco * aux->qtd;
+		aux = aux->prox;
+
+	} while (aux != NULL);
+	return soma;
+}
+
 void incluir(ProdutoL *p) {
 	ProdutoL *aux, *auxAnt;
-	int continuar = 1;
-	while (continuar == 1) {
+	char continuar;
+	float somaP;
+	do {
 		aux = (ProdutoL *) malloc(sizeof(ProdutoL));
 		printf("nome: \n");
 		scanf(" %s", aux->nomeProduto);
@@ -32,24 +49,16 @@ void incluir(ProdutoL *p) {
 			aux->prox = NULL;
 		}
 		auxAnt = aux;
-		printf("incluir outro?\n");
-		scanf(" %d", &continuar);
-		fflush(stdin);
-	}
-}
-
-void imprimir(ProdutoL *p) {
-	ProdutoL *aux;
-	aux = p->prox;
-	float soma = 0;
-	do {
-		printf("%s\n", aux->nomeProduto);
-		printf("%f\n", aux->preco);
-		soma += aux->preco;
-		aux = aux->prox;
-
-	} while (aux != NULL);
-	printf("Soma parcial: %0.2f \n", soma);
+		system("cls");
+		somaP = imprimir(p);
+		printf("Soma Parcial: %0.2f\n", somaP);
+		printf("Finalizar?(S/N)\n");
+		scanf("%c", &continuar);
+		continuar = toupper(continuar);
+	} while (continuar == 'N');
+	system("cls");
+	imprimir(p);
+	printf("Valor Final: %0.2f", somaP);
 }
 
 void excluir(ProdutoL *p) {
@@ -72,11 +81,26 @@ void excluir(ProdutoL *p) {
 }
 
 int main() {
-	ProdutoL *lista, *inicio, *fim;
+	ProdutoL *lista;
 	lista = malloc(sizeof(ProdutoL));
 	lista->prox = NULL;
-	incluir(lista);
-	excluir(lista);
-	imprimir(lista);
+	int opcao;
+	do {
+		printf("Digite uma opcao: \n");
+		scanf("%d", &opcao);
+		switch (opcao) {
+			case 1:
+				incluir(lista);
+				break;
+			case 2:
+				excluir(lista);
+				break;
+			case 3:
+				break;
+			case 0:
+				break;
+		}
+	} while (opcao != 0);
+	system("pause");
 	return 0;
 }
